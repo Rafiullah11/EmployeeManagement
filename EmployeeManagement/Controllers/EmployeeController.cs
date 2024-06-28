@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.Controllers
 {
-    [Route("Employee")]
+    //[Route("Employee")]
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
@@ -17,6 +17,7 @@ namespace EmployeeManagement.Controllers
             _employeeRepository = employeeRepository;
             this.hostingEnvironment = hostingEnvironment;
         }
+        //[Route("Index")]
         public ActionResult Index()
         {
             var list = _employeeRepository.GetAllEmployee();
@@ -41,7 +42,7 @@ namespace EmployeeManagement.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("Create")]
         public IActionResult Create(EmployeeCreateViewModel model)
         {
             if (ModelState.IsValid)
