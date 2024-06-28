@@ -1,0 +1,44 @@
+﻿[HttpPost("Create")]
+public IActionResult Create(EmployeeCreateViewModel model)
+{
+    if (ModelState.IsValid)
+    {
+        string uniqueFileName = null;
+
+        // Check if photos are uploaded
+        if (model.Photos != null && model.Photos.Count > 0)
+        {
+            foreach (IFormFile photo in model.Photos)
+            {
+                string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                // Copy the photo to the server
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    photo.CopyTo(fileStream);
+                }
+            }
+        }
+
+        // Create a new employee object
+        Employee newEmployee = new Employee
+        {
+            Name = model.Name,
+            Email = model.Email,
+            Department = model.Department,
+            Address = model.Address,
+            PhotoPath = uniqueFileName
+        };
+
+        // Add the new employee to the repository
+        _employeeRepository.Add(newEmployee);
+
+        // Redirect to the Index action
+        return RedirectToAction("Index");
+    }
+
+    // If ModelState is invalid, redisplay the form with the existing model
+    return View(model);
+}
