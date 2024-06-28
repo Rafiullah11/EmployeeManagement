@@ -1,0 +1,34 @@
+﻿@model EmployeeManagement.ViewModels.EmployeeDetailsViewModel
+
+<div class="card align-content-center" style="width: 26rem;">
+    <div class="card-header">
+        Employee Details
+    </div>
+    <img src="~/images/images.png" class="card-img-top" alt="..." />
+    <div class="card-body">
+        <table>
+            <tr>
+                <td><strong>Name: </strong>@Model.Employee.Name</td>
+            </tr>
+            @* <tr>
+            <td><strong>ID:</strong> @employee.Id</td>
+            </tr> *@
+            <tr>
+                <td><strong>Email:</strong> @Model.Employee.Email</td>
+            </tr>
+            <tr>
+                <td><strong>Department:</strong> @Model.Employee.Department</td>
+            </tr>
+            <tr>
+                <td><strong>Address:</strong> @Model.Employee.Address</td>
+            </tr>
+        </table>
+    </div>
+    <div class="card-footer">
+        <a asp-asp-controller="Employee" asp-action="Index" class="btn btn-primary">Back</a>
+        <a asp-asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Employee.Id" class="btn btn-success">Edit</a>
+        <a asp-asp-controller="Employee" asp-action="Delete" asp-route-id="@Model.Employee.Id" class="btn btn-danger">Delete</a>
+    </div>
+</div>
+
+
