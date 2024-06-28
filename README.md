@@ -6,10 +6,12 @@ Employee Registration: Effortlessly register new employees and upload their prof
 Department Management: Organize employees by departments for better data management.
 Employee Details: View and update detailed information about employees, including contact and departmental data.
 Technologies Used
+
 **Backend**
 .NET 8: The latest version of Microsoft's powerful framework for building web applications.
 ASP.NET Core MVC: A flexible, high-performance framework for creating dynamic web pages and RESTful APIs.
 C#: The primary programming language used for backend logic and operations.
+
 **Frontend**
 HTML5: Markup language used for structuring and presenting content.
 CSS3: Styling language for creating visually appealing web pages.
