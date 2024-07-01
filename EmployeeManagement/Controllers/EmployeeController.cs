@@ -27,9 +27,15 @@ namespace EmployeeManagement.Controllers
         [HttpGet("Details/{id}")]
         public IActionResult Details(int id)
         {
+            Employee employee = _employeeRepository.GetEmployeeById(id);
+            if (employee == null)
+            {
+                Response.StatusCode = 404;
+                return View("EmployeeNotFound",id);
+            }
             EmployeeDetailsViewModel viewModel = new EmployeeDetailsViewModel()
             {
-                Employee = _employeeRepository.GetEmployeeById(id),
+                Employee = employee,
                 PageTitle = "Employee Details"
             };
          

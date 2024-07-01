@@ -22,11 +22,17 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+else
+{
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
+    //app.UseStatusCodePages();
+}
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",
