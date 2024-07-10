@@ -1,4 +1,5 @@
 ﻿using EmployeeManagement.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace EmployeeManagement.ViewModels
@@ -10,6 +11,7 @@ namespace EmployeeManagement.ViewModels
         public string? Name { get; set; }
         [Required]
         [EmailAddress(ErrorMessage = "please try with correct email address")]
+        [Remote(action:"IsEmailInUse", controller:"Account")]
         public string? Email { get; set; }
         [Required]
         public Dept Department { get; set; }

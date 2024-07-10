@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<IdentityUser> signInManager;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,6 +8,20 @@
     <environment include="Development">
 
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+        @* <a href="~/lib/jquery/dist/jquery.min.map"></a> *@
+
+        @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+
+        @* <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script> *@
+
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+
+        @* <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script> *@
+
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
 
     </environment>
     <environment exclude="Development">
@@ -38,9 +53,29 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Employee" asp-action="Index">Home</a>
                         </li>
-                       @*  <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Employee" asp-action="Privacy">Privacy</a>
-                        </li> *@
+
+                    </ul>
+                   
+                    <ul class="navbar-nav  m-lg-auto">
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <form method="post" asp-action="logout" asp-controller="Account">
+                                <button type="submit" class="nav-link btn btn-link py-0">
+                                    Logout @User.Identity.Name
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="login">Login</a>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>

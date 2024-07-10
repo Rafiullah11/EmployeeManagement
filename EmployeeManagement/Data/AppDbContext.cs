@@ -1,11 +1,13 @@
 ﻿using EmployeeManagement.ExtensionMethod;
 using EmployeeManagement.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
+//using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
 
 namespace EmployeeManagement.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext :IdentityDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -15,6 +17,7 @@ namespace EmployeeManagement.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.SeedData();
         }
     }

@@ -5,19 +5,25 @@ using EmployeeManagement.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EmployeeManagement.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment;
+        private readonly ILogger logger;
 
-        public EmployeeController(IEmployeeRepository employeeRepository, Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment)
+        public EmployeeController(IEmployeeRepository employeeRepository, Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment,
+                                    ILogger<EmployeeController> logger)
         {
             _employeeRepository = employeeRepository;
             this.hostingEnvironment = hostingEnvironment;
+            this.logger = logger;
         }
+        [AllowAnonymous]
         public ActionResult Index()
         {
             var list = _employeeRepository.GetAllEmployee();
@@ -25,8 +31,11 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpGet("Details/{id}")]
+        [AllowAnonymous]
         public IActionResult Details(int id)
         {
+            logger.LogTrace("Log form trace");
+            //throw new Exception("Error in the details view");
             Employee employee = _employeeRepository.GetEmployeeById(id);
             if (employee == null)
             {
