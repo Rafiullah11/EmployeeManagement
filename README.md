@@ -27,3 +27,4 @@ Technologies Used
 **CSS3**: Styling language for creating visually appealing web pages.
 
 **Bootstrap** 5: A popular frontend framework that ensures responsive design and modern UI components.
+for complete project code reference https://github.com/rohitdukre95/ASP-NET-Core-Kudvenkat-Project
