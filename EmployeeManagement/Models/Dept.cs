@@ -3,8 +3,8 @@
     public enum Dept
     {
         None,
-        IT,
         HR,
-        Developer
+        IT,
+        Payroll
     }
 }

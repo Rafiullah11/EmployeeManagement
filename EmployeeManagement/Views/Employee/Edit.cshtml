@@ -1,7 +1,7 @@
 ﻿@model EmployeeManagement.ViewModels.EmployeeEditViewModel
 @{
     ViewData["Title"] = "Update employee record";
-    var photoPath = "~/images/" + (Model.ExistingPhotoPah ?? "images.png");
+    var photoPath = "~/images/" + (Model.ExistingPhotoPath ?? "images.png");
 
 }
 <div class="container container-fluid">
@@ -13,7 +13,7 @@
             <form enctype="multipart/form-data" asp-controller="Employee" asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
-                <input type="hidden" asp-for="ExistingPhotoPah" />
+                <input type="hidden" asp-for="ExistingPhotoPath" />
                 <div class="form-group mt-2">
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" />
@@ -32,12 +32,6 @@
                         <option selected>Please Select</option>
                     </select>
                     <span asp-validation-for="Department" class="text-danger"></span>
-                </div>
-
-                <div class="form-group mt-2">
-                    <label asp-for="Address" class="control-label"></label>
-                    <input asp-for="Address" class="form-control" />
-                    <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mt-2">

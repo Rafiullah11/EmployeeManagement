@@ -19,7 +19,13 @@ namespace EmployeeManagement.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.SeedData();
+            modelBuilder.Seed();
+
+            foreach (var foreignKey in modelBuilder.Model.GetEntityTypes()
+                .SelectMany(e => e.GetForeignKeys()))
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
     }
 }

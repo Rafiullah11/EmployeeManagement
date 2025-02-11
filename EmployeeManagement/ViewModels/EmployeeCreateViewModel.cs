@@ -1,21 +1,25 @@
 ﻿using EmployeeManagement.Models;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EmployeeManagement.ViewModels
 {
     public class EmployeeCreateViewModel
     {
         [Required]
-        [MaxLength(50)]
-        public string? Name { get; set; }
+        [MaxLength(50, ErrorMessage = "Name cannot exceed 50 characters")]
+        public string Name { get; set; }
         [Required]
-        [EmailAddress(ErrorMessage = "please try with correct email address")]
-        [Remote(action:"IsEmailInUse", controller:"Account")]
-        public string? Email { get; set; }
+        [RegularExpression(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
+            ErrorMessage = "Invalid Email Format")]
+        [Display(Name = "Office Email")]
+        public string Email { get; set; }
         [Required]
-        public Dept Department { get; set; }
-        public string? Address { get; set; }
-        public IFormFile? Photo { get; set; }
+        public Dept? Department { get; set; }
+        public IFormFile Photo { get; set; }
     }
 }

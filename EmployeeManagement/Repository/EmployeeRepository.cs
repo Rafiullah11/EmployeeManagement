@@ -1,47 +1,41 @@
-﻿using EmployeeManagement.Data;
-using EmployeeManagement.IRepository;
+﻿using EmployeeManagement.IRepository;
 using EmployeeManagement.Models;
-using EmployeeManagement.ViewModels;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace EmployeeManagement.Repository
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class MockEmployeeRepository : IEmployeeRepository
     {
-        //private readonly AppDbContext _appDbContext;
-
         private List<Employee> _employeeList;
-        public EmployeeRepository()
+
+        public MockEmployeeRepository()
         {
-            //this._appDbContext = appDbContext;
             _employeeList = new List<Employee>()
             {
-              new Employee { Id = 1, Name = "John", Email = "Johan@Email.com", Department=Dept.Developer, Address = "address 1" },
-              new Employee { Id = 2, Name = "Mike", Email = "Mike@Email.com", Department=Dept.HR, Address = "address 2" },
-              new Employee { Id = 3, Name = "Teddy", Email = "Teddy@Email.com",Department= Dept.IT, Address = "address 3" },
-              new Employee { Id = 4, Name = "Jame", Email = "Jame@Email.com", Department=Dept.IT, Address = "address 4" }
+                new Employee() { Id = 1, Name = "Mary", Department = Dept.HR, Email = "mary@pragimtech.com" },
+                new Employee() { Id = 2, Name = "John", Department = Dept.IT, Email = "john@pragimtech.com" },
+                new Employee() { Id = 3, Name = "Sam", Department = Dept.IT, Email = "sam@pragimtech.com" },
             };
-
         }
 
         public Employee Add(Employee employee)
         {
-            employee.Id = _employeeList.Max(x => x.Id) + 1;
+            employee.Id = _employeeList.Max(e => e.Id) + 1;
             _employeeList.Add(employee);
             return employee;
         }
 
         public Employee Delete(int id)
         {
-            var deleteEmployee = _employeeList.FirstOrDefault(e => e.Id == id);
-            if (deleteEmployee != null)
+            Employee employee = _employeeList.FirstOrDefault(e => e.Id == id);
+            if (employee != null)
             {
-                _employeeList.Remove(deleteEmployee);
-                
+                _employeeList.Remove(employee);
             }
-            return deleteEmployee;
+            return employee;
         }
 
         public IEnumerable<Employee> GetAllEmployee()
@@ -49,24 +43,21 @@ namespace EmployeeManagement.Repository
             return _employeeList;
         }
 
-        public Employee GetEmployeeById(int id)
+        public Employee GetEmployee(int Id)
         {
-            return _employeeList.FirstOrDefault(x => x.Id == id);
+            return _employeeList.FirstOrDefault(e => e.Id == Id);
         }
 
-        public Employee Update(Employee updateEmployee)
+        public Employee Update(Employee employeeChanges)
         {
-            var employee = _employeeList.FirstOrDefault(e => e.Id == updateEmployee.Id);
+            Employee employee = _employeeList.FirstOrDefault(e => e.Id == employeeChanges.Id);
             if (employee != null)
             {
-                employee.Name = updateEmployee.Name;
-                employee.Email = updateEmployee.Email;
-                employee.Department = updateEmployee.Department;
-                employee.Address = updateEmployee.Address;
-
+                employee.Name = employeeChanges.Name;
+                employee.Email = employeeChanges.Email;
+                employee.Department = employeeChanges.Department;
             }
             return employee;
         }
-       
     }
 }

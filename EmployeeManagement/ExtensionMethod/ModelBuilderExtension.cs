@@ -16,23 +16,21 @@ namespace EmployeeManagement.ExtensionMethod
                     Name = "Mary",
                     Email = "Mary@Email.com",
                     Department = Dept.IT,
-                    Address = "street no.1"
+                    //PhotoPath = "noimage.jpg"
                 },
                 new Employee()
                 {
                     Id = 2,
                     Name = "John",
                     Email = "John@Email.com",
-                    Department = Dept.Developer,
-                    Address = "street no.2"
+                    Department = Dept.HR,
                 },
                 new Employee()
                 {
                     Id = 3,
                     Name = "Mark",
                     Email = "Mark@Email.com",
-                    Department = Dept.Developer,
-                    Address = "street no.3"
+                    Department = Dept.Payroll,
                 });
                
         }
