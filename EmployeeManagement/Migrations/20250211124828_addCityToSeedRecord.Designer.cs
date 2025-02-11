@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeManagement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250211095856_madeSomeChanges")]
-    partial class madeSomeChanges
+    [Migration("20250211124828_addCityToSeedRecord")]
+    partial class addCityToSeedRecord
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,15 +126,25 @@ namespace EmployeeManagement.Migrations
                         {
                             Id = 1,
                             Department = 2,
-                            Email = "mary@pragimtech.com",
-                            Name = "Mary"
+                            Email = "Mary@Email.com",
+                            Name = "Mary",
+                            PhotoPath = "noimage.jpg"
                         },
                         new
                         {
                             Id = 2,
                             Department = 1,
-                            Email = "john@pragimtech.com",
-                            Name = "John"
+                            Email = "John@Email.com",
+                            Name = "John",
+                            PhotoPath = "noimage.jpg"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Department = 3,
+                            Email = "Mark@Email.com",
+                            Name = "Mark",
+                            PhotoPath = "noimage.jpg"
                         });
                 });
 

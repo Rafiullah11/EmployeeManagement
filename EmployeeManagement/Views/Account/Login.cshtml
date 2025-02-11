@@ -9,17 +9,23 @@
         <h1>Local Account Login</h1>
         <hr />
         <form method="post">
+            <!-- Hidden input for returnUrl -->
+            <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+
             <div asp-validation-summary="All" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Email"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Password"></label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <div class="checkbox">
                     <label asp-for="RememberMe">
@@ -28,6 +34,7 @@
                     </label>
                 </div>
             </div>
+
             <button type="submit" class="btn btn-primary">Login</button>
             <div>
                 <a asp-action="ForgotPassword">Forgot Password?</a>
@@ -51,7 +58,7 @@
                         {
                             <button type="submit" class="btn btn-primary" style="width:auto"
                                     name="provider" value="@provider.Name"
-                                    title="Login usin your @provider.DisplayName account">
+                                    title="Login using your @provider.DisplayName account">
                                 @provider.DisplayName
                             </button>
                         }

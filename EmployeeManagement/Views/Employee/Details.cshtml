@@ -1,42 +1,37 @@
-﻿@model EmployeeManagement.ViewModels.EmployeeDetailsViewModel
+﻿@model EmployeeDetailsViewModel
 
 @{
-    var photoPath = "~/images/" + (Model.Employee.PhotoPath ?? "images.png");
+    ViewBag.Title = "Employee Details";
+    var photoPath = "~/Images/" + (Model.Employee.PhotoPath ?? "noimage.jpg");
 }
 
-<div class="card mb-3 offset-2" style="max-width: 800px;">
-    <div class="row g-0">
-        <div class="col-md-4">
-            <img asp-append-version="true" src="@photoPath" class="img-fluid rounded-start" alt="...">
-        </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <h5 class="card-title"> Employee Details</h5>
-                <table>
-                    <tr>
-                        <td><strong>ID:</strong>@Model.Employee.Id</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Name: </strong>@Model.Employee.Name</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Email:</strong> @Model.Employee.Email</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Department:</strong> @Model.Employee.Department</td>
-                    </tr>
-                </table>
+<div class="row justify-content-center m-3">
+    <div class="col-sm-8">
+        <div class="card">
+            <div class="card-header">
+                <h1>@Model.Employee.Name</h1>
             </div>
 
-        </div>
-        <div class="card-footer">
-            <a asp-asp-controller="Employee" asp-action="Index" class="btn btn-primary">Back</a>
-            <a asp-asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Employee.Id" class="btn btn-success">Edit</a>
-            <a asp-asp-controller="Employee" asp-action="Delete" asp-route-id="@Model.Employee.Id" class="btn btn-danger">Delete</a>
+            <div class="card-body text-center">
+                <img class="card-img-top" src="@photoPath" asp-append-version="true" />
+
+                <h4>Employee ID : @Model.Employee.Id</h4>
+                <h4>Email : @Model.Employee.Email</h4>
+                <h4>Department : @Model.Employee.Department</h4>
+
+            </div>
+            <div class="card-footer text-center">
+                <a asp-controller="Employee" asp-action="index"
+                   class="btn btn-primary">Back</a>
+                <a asp-action="edit" asp-controller="Employee"
+                   asp-route-id="@Model.Employee.Id"
+                   class="btn btn-primary">Edit</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+            </div>
         </div>
     </div>
 </div>
 
-
-
-
+@section Scripts {
+    <script src="~/js/CustomScript.js"></script>
+}

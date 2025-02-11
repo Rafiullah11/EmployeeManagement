@@ -100,13 +100,20 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<AppDbContext>();
-    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-    await ApplicationDbInitializer.InitializeAsync(context, userManager, roleManager);
+        context.Database.Migrate();
+        await DbInitializer.InitializeAsync(context, userManager, roleManager);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred during seeding: {ex.Message}");
+    }
 }
-
 // Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
@@ -125,6 +132,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Employee}/{action=Index}/{id?}");
 
 app.Run();

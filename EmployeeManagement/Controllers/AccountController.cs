@@ -294,11 +294,11 @@ namespace EmployeeManagement.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string returnUrl)
+        public async Task<IActionResult> Login(string returnUrl = null)
         {
-            LoginViewModel model = new LoginViewModel
+            var model = new LoginViewModel
             {
-                ReturnUrl = returnUrl,
+                ReturnUrl = returnUrl ?? Url.Content("~/"),
                 ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
             };
 
@@ -307,7 +307,7 @@ namespace EmployeeManagement.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
@@ -316,25 +316,22 @@ namespace EmployeeManagement.Controllers
                 var user = await userManager.FindByEmailAsync(model.Email);
 
                 if (user != null && !user.EmailConfirmed &&
-                                    (await userManager.CheckPasswordAsync(user, model.Password)))
+                    await userManager.CheckPasswordAsync(user, model.Password))
                 {
                     ModelState.AddModelError(string.Empty, "Email not confirmed yet");
                     return View(model);
                 }
 
-                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password,
-                                        model.RememberMe, true);
+                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
 
                 if (result.Succeeded)
                 {
-                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("index", "home");
-                    }
+                    // Ensure a valid return URL or redirect to Employee
+                    var redirectUrl = !string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl)
+                                      ? model.ReturnUrl
+                                      : Url.Action("Index", "Employee");
+
+                    return Redirect(redirectUrl);
                 }
 
                 if (result.IsLockedOut)
@@ -347,6 +344,7 @@ namespace EmployeeManagement.Controllers
 
             return View(model);
         }
+
 
         [AllowAnonymous]
         [HttpPost]

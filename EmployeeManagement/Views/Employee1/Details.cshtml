@@ -1,0 +1,42 @@
+﻿@model EmployeeManagement.ViewModels.EmployeeDetailsViewModel
+
+@{
+    var photoPath = "~/images/" + (Model.Employee.PhotoPath ?? "images.png");
+}
+
+<div class="card mb-3 offset-2" style="max-width: 800px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img asp-append-version="true" src="@photoPath" class="img-fluid rounded-start" alt="...">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title"> Employee Details</h5>
+                <table>
+                    <tr>
+                        <td><strong>ID:</strong>@Model.Employee.Id</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Name: </strong>@Model.Employee.Name</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email:</strong> @Model.Employee.Email</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Department:</strong> @Model.Employee.Department</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <a asp-asp-controller="Employee" asp-action="Index" class="btn btn-primary">Back</a>
+            <a asp-asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Employee.Id" class="btn btn-success">Edit</a>
+            <a asp-asp-controller="Employee" asp-action="Delete" asp-route-id="@Model.Employee.Id" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+</div>
+
+
+
+

@@ -94,6 +94,7 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> ManageUserClaims(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
@@ -132,6 +133,7 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> ManageUserClaims(UserClaimsViewModel model)
         {
             var user = await userManager.FindByIdAsync(model.UserId);
@@ -164,7 +166,8 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "EditRolePolicy")]
+        //[Authorize(Policy = "EditRolePolicy")]        
+        [AllowAnonymous]
         public async Task<IActionResult> ManageUserRoles(string userId)
         {
             ViewBag.userId = userId;
@@ -203,7 +206,8 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "EditRolePolicy")]
+        //[Authorize(Policy = "EditRolePolicy")]
+        [AllowAnonymous]
         public async Task<IActionResult> ManageUserRoles(List<UserRolesViewModel> model, string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
