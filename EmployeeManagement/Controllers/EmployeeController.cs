@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace EmployeeManagement.Controllers
@@ -49,35 +50,58 @@ namespace EmployeeManagement.Controllers
         }
 
         [AllowAnonymous]
-        public ViewResult Details(string id)
+        public IActionResult Details(string id)
         {
-            //throw new Exception("Error in Details View");
-
-            logger.LogTrace("Trace Log");
-            logger.LogDebug("Debug Log");
-            logger.LogInformation("Information Log");
-            logger.LogWarning("Warning Log");
-            logger.LogError("Error Log");
-            logger.LogCritical("Critical Log");
-
-            int employeeId = Convert.ToInt32(protector.Unprotect(id));
-
-            Employee employee = _employeeRepository.GetEmployee(employeeId);
-
-            if (employee == null)
+            try
             {
-                Response.StatusCode = 404;
-                return View("EmployeeNotFound", employeeId);
+                logger.LogTrace("Trace Log");
+                logger.LogDebug("Debug Log");
+                logger.LogInformation("Information Log");
+                logger.LogWarning("Warning Log");
+                logger.LogError("Error Log");
+                logger.LogCritical("Critical Log");
+
+                // Validate and unprotect the encrypted ID
+                if (string.IsNullOrWhiteSpace(id))
+                {
+                    return BadRequest("Invalid or missing ID.");
+                }
+
+                int employeeId = Convert.ToInt32(protector.Unprotect(id));
+
+                Employee employee = _employeeRepository.GetEmployee(employeeId);
+
+                if (employee == null)
+                {
+                    Response.StatusCode = 404;
+                    return View("EmployeeNotFound", employeeId);
+                }
+
+                var homeDetailsViewModel = new EmployeeDetailsViewModel
+                {
+                    Employee = employee,
+                    PageTitle = "Employee Details"
+                };
+
+                return View(homeDetailsViewModel);
             }
-
-            EmployeeDetailsViewModel homeDetailsViewModel = new EmployeeDetailsViewModel()
+            catch (CryptographicException ex)
             {
-                Employee = employee,
-                PageTitle = "Employee Details"
-            };
-
-            return View(homeDetailsViewModel);
+                logger.LogError(ex, "Decryption failed for ID: {Id}", id);
+                return BadRequest("Invalid request data.");
+            }
+            catch (FormatException ex)
+            {
+                logger.LogError(ex, "Invalid input format for ID: {Id}", id);
+                return BadRequest("Invalid ID format.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogCritical(ex, "An unexpected error occurred.");
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
+
 
         [HttpGet]
         public ViewResult Create()
