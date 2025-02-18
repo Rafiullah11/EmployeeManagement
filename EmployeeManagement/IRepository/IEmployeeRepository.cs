@@ -5,10 +5,10 @@ namespace EmployeeManagement.IRepository
 {
     public interface IEmployeeRepository
     {
-        Employee GetEmployeeById(int id);
+        Employee GetEmployee(int Id);
         IEnumerable<Employee> GetAllEmployee();
         Employee Add(Employee employee);
-        Employee Update(Employee updateEmployee);
+        Employee Update(Employee employeeChanges);
         Employee Delete(int id);
     }
 }

@@ -1,0 +1,133 @@
+﻿[HttpPost("Create")]
+public IActionResult Create(EmployeeCreateViewModel model)
+{
+    if (ModelState.IsValid)
+    {
+        string uniqueFileName = null;
+
+        // Check if photos are uploaded
+        if (model.Photos != null && model.Photos.Count > 0)
+        {
+            foreach (IFormFile photo in model.Photos)
+            {
+                string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                // Copy the photo to the server
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    photo.CopyTo(fileStream);
+                }
+            }
+        }
+
+        // Create a new employee object
+        Employee newEmployee = new Employee
+        {
+            Name = model.Name,
+            Email = model.Email,
+            Department = model.Department,
+            Address = model.Address,
+            PhotoPath = uniqueFileName
+        };
+
+        // Add the new employee to the repository
+        _employeeRepository.Add(newEmployee);
+
+        // Redirect to the Index action
+        return RedirectToAction("Index");
+    }
+
+    // If ModelState is invalid, redisplay the form with the existing model
+    return View(model);
+}
+
+
+
+////////////////////////////////
+<?xml version="1.0" encoding="utf-8" ?>
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!the targets to write to -->
+<targets>
+<!-write logs to file -->
+<target name="allfile" xsi:type="File"
+fileName="c:\DemoLogs\nlog-all-${shortdate}.log"/>
+</target>>
+<rules to map from logger name to target -->
+<rules>
+<!--All logs, including from Microsoft-->
+<logger name="*" minlevel="Trace" writeTo="allfile" />
+</rules>
+</nlog>
+///////////////////////////////////////////////////
+original progam.cs class
+
+using EmployeeManagement.Data;
+using EmployeeManagement.IRepository;
+using EmployeeManagement.Models;
+using EmployeeManagement.Repository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using NLog.Web;
+using NLog;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// set up NLOG for dependency injection
+builder.Logging.ClearProviders(); // Clears default logging providers
+builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace); // Set minimum logging level
+builder.Host.UseNLog();
+//builder.Logging.AddNLog();
+
+//builder.Configuration((hostingContext, logging) =>
+//{
+//    builder.Logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+//    builder.Logging.AddConsole();
+//    builder.Logging.AddDebug();
+//    builder.Logging.AddEventSourceLogger();
+//    builder.Logging.AddNLog();
+
+//});
+
+
+
+
+// Add services to the container.
+
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+    //app.UseStatusCodePagesWithReExecute("/Error/{0}");
+    //app.UseStatusCodePages();
+}
+
+
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Employee}/{action=Index}/{id?}");
+
+
+app.Run();

@@ -1,31 +1,42 @@
-﻿@model IEnumerable<EmployeeManagement.Models.Employee>
+﻿@model IEnumerable<Employee>
 
-<div class="container-fluid p-3" style="background-color:#f2f2f2; border-radius:20px">
-    <div style="display:flex; justify-content:space-between">
-        <div>
-            <h2>@ViewBag.PageTitle</h2>
+@{
+    ViewBag.Title = "Employee List";
+}
+
+<div class="container-fluid p-3 mt-lg-3 content">
+    <div class="row">
+        <div class="col-9">
+            <h3 class="text-primary">Employee List</h3>
         </div>
-        <div>
-            <a asp-asp-controller="Employee" asp-action="Create" class="btn btn-primary">Add Employee</a>
+        <div class="col-3 text-end padding-right">
+            <a asp-action="Create" asp-controller="Employee" class="custom-btn btn btn-primary">
+                Add New Employee
+            </a>
         </div>
-       
     </div>
+
+    <hr />
+
     <div class="row">
         @foreach (var employee in Model)
         {
-            <div class="col-md-3 p-2">
-                <div class="card p-2" style="border-radius:15px">
-                    <div class="card-header">
-                        <strong>@employee.Name </strong>
-                    </div>
-                    <img asp-append-version="true" src="~/images/images.png" class="card-img-top" alt="Employee Image" />
+            var photoPath = Url.Content("~/images/" + (employee.PhotoPath ?? "noimage.jpg"));
+
+            <div class="col-md-4 p-2">
+                <div class="card h-100" style="border-radius: 15px;">
+                    <img src="@photoPath" class="card-img-top img-fluid" alt="Employee Image" style="max-height: 200px; object-fit: cover; border-radius: 15px 15px 0 0;" />
                     <div class="card-body">
-                       
+                        <h5 class="card-title text-primary">@employee.Name</h5>
+                        <p class="card-text">
+                            <strong>Department:</strong> @employee.Department<br />
+                            <strong>Email:</strong> @employee.Email
+                        </p>
                     </div>
-                    <div class="card-footer">
-                        <a asp-asp-controller="Employee" asp-action="Details" asp-route-id="@employee.Id" class="btn btn-primary m-1">View</a>
-                        <a asp-asp-controller="Employee" asp-action="Edit" asp-route-id="@employee.Id" class="btn btn-success m-1">Edit</a>
-                        <a asp-asp-controller="Employee" asp-action="Delete"   asp-route-id="@employee.Id" class="btn btn-danger m-1">Delete</a>
+                    <div class="card-footer text-center">
+                        <a asp-action="Details" asp-route-id="@employee.EncryptedId" class="btn btn-outline-primary m-1">View</a>
+                        <a asp-action="Edit" asp-route-id="@employee.Id" class="btn btn-outline-success m-1">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@employee.Id" class="btn btn-outline-danger m-1">Delete</a>
                     </div>
                 </div>
             </div>

@@ -1,34 +1,43 @@
-﻿@model EmployeeManagement.ViewModels.EmployeeDetailsViewModel
+﻿@model EmployeeDetailsViewModel
 
-<div class="card align-content-center" style="width: 26rem;">
-    <div class="card-header">
-        Employee Details
-    </div>
-    <img src="~/images/images.png" class="card-img-top" alt="..." />
-    <div class="card-body">
-        <table>
-            <tr>
-                <td><strong>Name: </strong>@Model.Employee.Name</td>
-            </tr>
-            @* <tr>
-            <td><strong>ID:</strong> @employee.Id</td>
-            </tr> *@
-            <tr>
-                <td><strong>Email:</strong> @Model.Employee.Email</td>
-            </tr>
-            <tr>
-                <td><strong>Department:</strong> @Model.Employee.Department</td>
-            </tr>
-            <tr>
-                <td><strong>Address:</strong> @Model.Employee.Address</td>
-            </tr>
-        </table>
-    </div>
-    <div class="card-footer">
-        <a asp-asp-controller="Employee" asp-action="Index" class="btn btn-primary">Back</a>
-        <a asp-asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Employee.Id" class="btn btn-success">Edit</a>
-        <a asp-asp-controller="Employee" asp-action="Delete" asp-route-id="@Model.Employee.Id" class="btn btn-danger">Delete</a>
+@{
+    ViewBag.Title = "Employee Details";
+    var photoPath = "~/Images/" + (Model.Employee.PhotoPath ?? "noimage.jpg");
+}
+
+<div class="card mt-lg-5 mb-3 offset-2" style="max-width: 800px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img asp-append-version="true" src="@photoPath" class="img-fluid rounded-start" alt="...">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title"> Employee Details</h5>
+                <table>
+                    <tr>
+                        <td><strong>ID:</strong>@Model.Employee.Id</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Name: </strong>@Model.Employee.Name</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email:</strong> @Model.Employee.Email</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Department:</strong> @Model.Employee.Department</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <div class="p-3">
+            <a asp-asp-controller="Employee" asp-action="Index" class="btn btn-outline-primary m-1">View</a>
+            <a asp-asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Employee.Id"   class="btn btn-outline-success m-1">Edit</a>
+            <a asp-asp-controller="Employee" asp-action="Delete" asp-route-id="@Model.Employee.Id"  class="btn btn-outline-danger m-1">Delete</a>
+        </div>
     </div>
 </div>
 
-
+@section Scripts {
+    <script src="~/js/CustomScript.js"></script>
+}

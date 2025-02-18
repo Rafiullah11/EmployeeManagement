@@ -1,0 +1,36 @@
+﻿@model IEnumerable<EmployeeManagement.Models.Employee>
+
+<div class="container-fluid p-3" style="background-color:#f2f2f2; border-radius:20px">
+    <div style="display:flex; justify-content:space-between">
+        <div>
+            <h2>@ViewBag.PageTitle</h2>
+        </div>
+        <div>
+            <a asp-asp-controller="Employee" asp-action="Create" class="btn btn-primary">Add Employee</a>
+        </div>
+       
+    </div>
+    <div class="row">
+        @foreach (var employee in Model)
+        {
+            var photoPath = "~/images/" + (employee.PhotoPath ?? "images.png");
+
+            <div class="col-md-3 p-2">
+                <div class="card p-2" style="border-radius:15px">
+                    <div class="card-header">
+                        <strong>@employee.Name </strong>
+                    </div>
+                    <img asp-append-version="true" src="@photoPath" class="card-img-top" alt="Employee Image" width="200" height="250" />
+                    <div class="card-body">
+                       
+                    </div>
+                    <div class="card-footer">
+                        <a asp-asp-controller="Employee" asp-action="Details" asp-route-id="@employee.Id" class="btn btn-primary m-1">View</a>
+                        <a asp-asp-controller="Employee" asp-action="Edit" asp-route-id="@employee.Id" class="btn btn-success m-1">Edit</a>
+                        <a asp-asp-controller="Employee" asp-action="Delete"   asp-route-id="@employee.Id" class="btn btn-danger m-1">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

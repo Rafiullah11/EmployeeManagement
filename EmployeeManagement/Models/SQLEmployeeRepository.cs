@@ -1,67 +1,66 @@
 ﻿using EmployeeManagement.Data;
 using EmployeeManagement.IRepository;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EmployeeManagement.Models
 {
     public class SQLEmployeeRepository : IEmployeeRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContext context;
+        private readonly ILogger<SQLEmployeeRepository> logger;
 
-        public SQLEmployeeRepository(AppDbContext dbContext)
+        public SQLEmployeeRepository(AppDbContext context,
+                                    ILogger<SQLEmployeeRepository> logger)
         {
-            this._dbContext = dbContext;
+            this.context = context;
+            this.logger = logger;
         }
+
         public Employee Add(Employee employee)
         {
-           _dbContext.Employees.Add(employee);
-           _dbContext.SaveChanges();
+            context.Employees.Add(employee);
+            context.SaveChanges();
             return employee;
         }
 
         public Employee Delete(int id)
         {
-           var deleteEmployee = _dbContext.Employees.Find(id);
-            if (deleteEmployee != null)
+            Employee employee = context.Employees.Find(id);
+            if (employee != null)
             {
-                _dbContext.Employees.Remove(deleteEmployee);
-                _dbContext.SaveChanges();
+                context.Employees.Remove(employee);
+                context.SaveChanges();
             }
-            return deleteEmployee;
+            return employee;
         }
 
         public IEnumerable<Employee> GetAllEmployee()
         {
-            return _dbContext.Employees;
+            return context.Employees;
         }
 
-        public Employee GetEmployeeById(int id)
+        public Employee GetEmployee(int Id)
         {
-            return _dbContext.Employees.Find(id);
-           
+            logger.LogTrace("Trace Log");
+            logger.LogDebug("Debug Log");
+            logger.LogInformation("Information Log");
+            logger.LogWarning("Warning Log");
+            logger.LogError("Error Log");
+            logger.LogCritical("Critical Log");
+
+            return context.Employees.Find(Id);
         }
 
-        public Employee Update(Employee updateEmployee)
+        public Employee Update(Employee employeeChanges)
         {
-           var employee = _dbContext.Employees.Attach(updateEmployee);
-           employee.State = EntityState.Modified;
-           _dbContext.SaveChanges();
-           return updateEmployee;
+            var employee = context.Employees.Attach(employeeChanges);
+            employee.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            context.SaveChanges();
+            return employeeChanges;
         }
-        //public Employee Update(Employee updateEmployee)
-        //{
-        //    var employee = _dbContext.Employees.FirstOrDefault(e =>e.Id == updateEmployee.Id);
-        //    if (employee != null)
-        //    {
-        //        employee.Name = updateEmployee.Name;
-        //        employee.Email = updateEmployee.Email;
-        //        employee.Department = updateEmployee.Department;
-        //        employee.Address = updateEmployee.Address;
-
-
-        //    }
-        //    return employee;
-        //}
     }
 }
